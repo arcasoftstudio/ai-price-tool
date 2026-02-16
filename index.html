@@ -1110,10 +1110,27 @@
             event.preventDefault();
             const email = document.getElementById('user-email').value;
             
-            // Log email (integrate with Mailchimp, ConvertKit, etc.)
-            console.log('Email submitted:', email);
+            // Invia a Google Sheets
+            const googleSheetUrl = 'https://script.google.com/macros/s/AKfycbzRoaW9q6cCZxqs3_yuEEo2u9Q_HR7-FQ4qbvF9HxegFapmmIKt_Wn_tpoKtVddrBFU/exec';
             
-            // Show success message
+            fetch(googleSheetUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ 
+                    email: email,
+                    source: 'AI Task Pricer',
+                    timestamp: new Date().toISOString()
+                })
+            }).then(() => {
+                console.log('Email sent to Google Sheets:', email);
+            }).catch((error) => {
+                console.error('Error sending email:', error);
+            });
+            
+            // Mostra messaggio di successo
             const form = document.getElementById('email-form');
             form.innerHTML = `
                 <div class="text-center py-4">
@@ -1123,7 +1140,7 @@
                 </div>
             `;
             
-            // Auto-close after 3 seconds
+            // Auto-chiudi dopo 3 secondi e resetta form
             setTimeout(() => {
                 closeModal();
                 // Reset form
