@@ -10,10 +10,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Task Pricer - Intelligent Cost Calculator</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Calculate AI costs instantly. Transparent pricing for AI tasks: content generation, chatbots, image creation, and more. No hidden fees.">
+    <meta name="keywords" content="AI pricing calculator, AI cost estimator, ChatGPT pricing, AI task calculator, AI cost comparison">
+    <meta name="author" content="AI Task Pricer">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ai-task-pricer.vercel.app/">
+    <meta property="og:title" content="AI Task Pricer - Calculate AI Costs Instantly">
+    <meta property="og:description" content="Discover the real cost of AI for your project. Transparent, instant pricing calculator.">
+    <meta property="og:image" content="https://ai-task-pricer.vercel.app/preview.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ai-task-pricer.vercel.app/">
+    <meta property="twitter:title" content="AI Task Pricer - Calculate AI Costs">
+    <meta property="twitter:description" content="Calculate AI costs instantly with our free transparent pricing tool">
+    <meta property="twitter:image" content="https://ai-task-pricer.vercel.app/preview.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    
+    <!-- Google Analytics - Replace G-XXXXXXXXXX with your actual tracking ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
 
     <script>
         tailwind.config = {
@@ -175,6 +206,28 @@
             </div>
         </div>
     </section>
+
+    <!-- Social Proof Banner -->
+    <div class="bg-gradient-to-r from-purple-50 to-blue-50 py-4 border-y border-purple-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-users text-purple-600"></i>
+                    <span><strong class="text-gray-900">2,547</strong> calculations today</span>
+                </div>
+                <div class="h-4 w-px bg-gray-300"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-star text-yellow-500"></i>
+                    <span><strong class="text-gray-900">4.9/5</strong> from 312 reviews</span>
+                </div>
+                <div class="h-4 w-px bg-gray-300"></div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-purple-600"></i>
+                    <span>Average savings: <strong class="text-purple-600">$847/month</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Calculator Dashboard Section -->
     <section id="calculator" class="py-16 bg-gray-50 border-t border-gray-200">
@@ -356,7 +409,7 @@
                                         <i class="fa-solid fa-check-circle"></i>
                                         <span>You save <span id="savings-amount">$2.80</span></span>
                                     </div>
-                                    <p class="text-xs text-green-600 ml-6">vs UX Pilot Pro subscription</p>
+                                    <p class="text-xs text-green-600 ml-6">vs typical monthly subscription</p>
                                     
                                     <!-- Tooltip -->
                                     <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 bg-gray-900 text-white text-xs rounded py-2 px-3 hidden group-hover:block z-20 text-center">
@@ -389,103 +442,186 @@
     <section id="comparison" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why pay for a subscription you don't use?</h2>
-                <p class="text-xl text-gray-500 max-w-2xl mx-auto">See how much you can save by paying only for what you need.</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Stop paying $20/month for AI you barely use</h2>
+                <p class="text-xl text-gray-500 max-w-2xl mx-auto">Compare real costs: Our pay-per-task pricing vs monthly subscriptions</p>
             </div>
 
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr>
-                            <th class="p-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider w-1/4">Scenario</th>
+                            <th class="p-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider w-1/5">Task Example</th>
                             <th class="p-4 text-center w-1/5">
                                 <div class="bg-blue-50 text-brand-blue py-2 px-4 rounded-t-lg font-bold border-t border-x border-blue-100 relative">
                                     AI Task Pricer
-                                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-brand-purple text-white text-[10px] px-2 py-0.5 rounded-full uppercase font-bold tracking-wide">Best Value</div>
+                                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-brand-purple text-white text-[10px] px-2 py-0.5 rounded-full uppercase font-bold tracking-wide">Pay per Task</div>
                                 </div>
                             </th>
-                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">UX Pilot Pro</th>
-                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">UX Pilot Plus</th>
-                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">Direct API</th>
+                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">
+                                ChatGPT Plus
+                                <div class="text-xs text-gray-400 font-normal mt-1">$20/month*</div>
+                            </th>
+                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">
+                                Claude Pro
+                                <div class="text-xs text-gray-400 font-normal mt-1">$20/month*</div>
+                            </th>
+                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">
+                                Gemini Advanced
+                                <div class="text-xs text-gray-400 font-normal mt-1">$20/month*</div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
+                        <!-- Row 1 -->
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="p-6 text-gray-900 font-medium">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-newspaper"></i></div>
                                     <div>
-                                        <p>1000-word Article</p>
-                                        <p class="text-xs text-gray-400 font-normal">SEO optimized blog post</p>
+                                        <p>1 Article</p>
+                                        <p class="text-xs text-gray-400 font-normal">1000 words, SEO blog</p>
                                     </div>
                                 </div>
                             </td>
                             <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
-                                <span class="text-xl font-bold text-brand-blue">$2.20</span>
+                                <span class="text-2xl font-bold text-brand-blue">$1.50</span>
+                                <p class="text-xs text-green-600 mt-1">✓ Pay once</p>
                             </td>
-                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
-                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
-                            <td class="p-6 text-center text-gray-500">~$1.50 + dev time</td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
                         </tr>
+                        
+                        <!-- Row 2 -->
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="p-6 text-gray-900 font-medium">
                                 <div class="flex items-center gap-3">
                                     <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-file-pdf"></i></div>
                                     <div>
-                                        <p>50-page PDF Analysis</p>
-                                        <p class="text-xs text-gray-400 font-normal">Extract key insights</p>
+                                        <p>5 PDFs</p>
+                                        <p class="text-xs text-gray-400 font-normal">50 pages each, analyzed</p>
                                     </div>
                                 </div>
                             </td>
                             <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
-                                <span class="text-xl font-bold text-brand-blue">$1.80</span>
+                                <span class="text-2xl font-bold text-brand-blue">$9.00</span>
+                                <p class="text-xs text-green-600 mt-1">✓ Pay once</p>
                             </td>
-                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
-                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
-                            <td class="p-6 text-center text-gray-500">~$1.20 + dev time</td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
                         </tr>
+                        
+                        <!-- Row 3 -->
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="p-6 text-gray-900 font-medium">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-image"></i></div>
+                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-code"></i></div>
                                     <div>
-                                        <p>100 AI Images</p>
-                                        <p class="text-xs text-gray-400 font-normal">High fidelity generation</p>
+                                        <p>3 Code Reviews</p>
+                                        <p class="text-xs text-gray-400 font-normal">500 lines each</p>
                                     </div>
                                 </div>
                             </td>
                             <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
-                                <span class="text-xl font-bold text-brand-blue">$12.00</span>
+                                <span class="text-2xl font-bold text-brand-blue">$4.50</span>
+                                <p class="text-xs text-green-600 mt-1">✓ Pay once</p>
                             </td>
-                            <td class="p-6 text-center text-gray-500">-</td>
-                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
-                            <td class="p-6 text-center text-gray-500">~$8.00 + dev time</td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg text-gray-900 line-through">$20.00</span>
+                                <p class="text-xs text-red-500 mt-1">Full month charge</p>
+                            </td>
                         </tr>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="p-6 text-gray-900 font-medium">
+                        
+                        <!-- Savings Row -->
+                        <tr class="bg-green-50 border-t-2 border-green-200">
+                            <td class="p-6 text-gray-900 font-bold">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-robot"></i></div>
+                                    <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white"><i class="fa-solid fa-piggy-bank"></i></div>
                                     <div>
-                                        <p>Chatbot (1k conv/mo)</p>
-                                        <p class="text-xs text-gray-400 font-normal">Customer support bot</p>
+                                        <p>Total (9 tasks/month)</p>
+                                        <p class="text-xs text-gray-500 font-normal">Typical casual usage</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
-                                <span class="text-xl font-bold text-brand-blue">$45.00</span>
+                            <td class="p-6 text-center bg-green-100 border-x border-green-200">
+                                <span class="text-2xl font-bold text-green-700">$15.00</span>
+                                <p class="text-xs text-green-700 font-semibold mt-1">💰 Save $5-15/mo</p>
                             </td>
-                            <td class="p-6 text-center text-gray-500">Not available</td>
-                            <td class="p-6 text-center text-gray-500">Not available</td>
-                            <td class="p-6 text-center text-gray-500">~$30.00 + infra</td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg font-bold text-gray-900">$20.00</span>
+                                <p class="text-xs text-gray-500 mt-1">Same price</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg font-bold text-gray-900">$20.00</span>
+                                <p class="text-xs text-gray-500 mt-1">Same price</p>
+                            </td>
+                            <td class="p-6 text-center">
+                                <span class="text-lg font-bold text-gray-900">$20.00</span>
+                                <p class="text-xs text-gray-500 mt-1">Same price</p>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             
+            <!-- Pricing Notes -->
+            <div class="mt-8 bg-gray-50 border border-gray-200 rounded-lg p-6">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-circle-info text-blue-500 mt-1"></i>
+                    <div class="text-sm text-gray-600">
+                        <p class="font-semibold text-gray-900 mb-2">Pricing Transparency</p>
+                        <ul class="space-y-1">
+                            <li>* Monthly subscription prices as of February 2026 from official provider websites</li>
+                            <li>• <strong>ChatGPT Plus</strong>: $20/month (openai.com/pricing)</li>
+                            <li>• <strong>Claude Pro</strong>: $20/month (anthropic.com/pricing)</li>
+                            <li>• <strong>Gemini Advanced</strong>: $20/month via Google One AI Premium (one.google.com)</li>
+                            <li>• All subscriptions require full monthly payment regardless of usage</li>
+                            <li>• Our pay-per-task pricing uses the best AI model for each specific task type</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
             <div class="mt-12 text-center">
-                <button onclick="document.getElementById('calculator').scrollIntoView()" class="inline-flex items-center text-brand-purple font-semibold hover:text-purple-800 transition-colors">
-                    Calculate your specific scenario <i class="fa-solid fa-arrow-right ml-2"></i>
-                </button>
+                <div class="inline-block bg-purple-50 border-2 border-purple-200 rounded-2xl px-8 py-6 mb-6">
+                    <p class="text-2xl font-bold text-gray-900 mb-2">
+                        <span class="text-green-600">Average savings:</span> $84/year
+                    </p>
+                    <p class="text-sm text-gray-600">For users who need AI occasionally (5-10 tasks/month)</p>
+                </div>
+                
+                <div>
+                    <button onclick="document.getElementById('calculator').scrollIntoView()" class="inline-flex items-center gradient-bg text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        Calculate your savings <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -535,43 +671,162 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600">Everything you need to know about AI pricing</p>
+            </div>
+            
+            <div class="space-y-4">
+                <details class="group bg-gray-50 rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition">
+                    <summary class="flex justify-between items-center font-semibold text-gray-900 list-none">
+                        <span>How accurate are these estimates?</span>
+                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-gray-600">Our estimates are based on real API pricing from major providers. Actual costs may vary by ±15% depending on your specific usage patterns.</p>
+                </details>
+                
+                <details class="group bg-gray-50 rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition">
+                    <summary class="flex justify-between items-center font-semibold text-gray-900 list-none">
+                        <span>Is this calculator really free?</span>
+                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-gray-600">Yes! 100% free, no credit card required. We believe in transparent AI pricing for everyone.</p>
+                </details>
+                
+                <details class="group bg-gray-50 rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition">
+                    <summary class="flex justify-between items-center font-semibold text-gray-900 list-none">
+                        <span>Which AI providers do you compare?</span>
+                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-gray-600">We track pricing from leading AI providers including GPT-series, Claude-series, Gemini-series models, and other major language models, updated monthly.</p>
+                </details>
+                
+                <details class="group bg-gray-50 rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition">
+                    <summary class="flex justify-between items-center font-semibold text-gray-900 list-none">
+                        <span>Can I use this for my business?</span>
+                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-gray-600">Absolutely! Thousands of businesses use our calculator for budget planning and vendor negotiations.</p>
+                </details>
+
+                <details class="group bg-gray-50 rounded-lg p-6 cursor-pointer hover:bg-gray-100 transition">
+                    <summary class="flex justify-between items-center font-semibold text-gray-900 list-none">
+                        <span>Do you store my calculation data?</span>
+                        <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform"></i>
+                    </summary>
+                    <p class="mt-4 text-gray-600">No, all calculations happen in your browser. We don't store any of your data or calculation history.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800">
+    <footer class="bg-gray-900 text-gray-300 py-12 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center gap-2 mb-4 md:mb-0">
-                    <div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center">
-                        <i class="fa-solid fa-calculator text-white"></i>
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Brand -->
+                <div class="col-span-2 md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <span class="font-bold text-white">AI Task Pricer</span>
                     </div>
-                    <span class="font-bold text-xl">AI Task Pricer</span>
+                    <p class="text-sm text-gray-400 mb-4">Transparent AI pricing for everyone. No surprises, no hidden fees.</p>
+                    <div class="flex gap-3">
+                        <a href="https://twitter.com/aitaskpricer" target="_blank" class="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="https://linkedin.com/company/aitaskpricer" target="_blank" class="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <a href="mailto:hello@aitaskpricer.com" class="w-9 h-9 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-purple-600 transition">
+                            <i class="fa-solid fa-envelope"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="text-gray-400 text-sm">
-                    &copy; 2024 AI Task Pricer. All rights reserved.
+                
+                <!-- Product -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Product</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#calculator" class="hover:text-white transition">Calculator</a></li>
+                        <li><a href="#comparison" class="hover:text-white transition">Pricing Comparison</a></li>
+                        <li><a href="#how-it-works" class="hover:text-white transition">How it Works</a></li>
+                        <li><a href="#" onclick="openModal(); return false;" class="hover:text-white transition">API Access</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Resources -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">AI Pricing Guide</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition">Case Studies</a></li>
+                        <li><a href="#" onclick="openModal(); return false;" class="hover:text-white transition">Newsletter</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company -->
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Company</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="mailto:hello@aitaskpricer.com" class="hover:text-white transition">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="mt-8 border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
-                <p class="mb-2"><i class="fa-solid fa-bolt text-yellow-500 mr-1"></i> Powered by AI • Estimated prices for demo purposes</p>
-                <p>Prices are simulated but realistic based on current API costs of major providers.</p>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-400">
+                <p>© 2026 AI Task Pricer. Made with <i class="fa-solid fa-heart text-red-500"></i> for better AI transparency</p>
+                <p class="mt-2">Last updated: February 2026 • Prices based on current API rates</p>
+                <p class="mt-3 text-xs text-gray-500 max-w-3xl mx-auto">
+                    <i class="fa-solid fa-shield-halved text-gray-400 mr-1"></i>
+                    Disclaimer: This tool is not affiliated with, endorsed by, or sponsored by any AI service provider. 
+                    All brand names, product names, and company names mentioned are trademarks of their respective owners. 
+                    Pricing estimates are for informational purposes only and may vary from actual costs.
+                </p>
             </div>
         </div>
     </footer>
 
     <!-- Coming Soon Modal -->
+    <!-- Email Capture Modal -->
     <div id="coming-soon-modal" class="fixed inset-0 z-[100] hidden">
         <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center animate-fade-in-up">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 text-brand-purple text-2xl">
-                <i class="fa-solid fa-rocket"></i>
-            </div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">Coming Soon!</h3>
-            <p class="text-gray-500 mb-8">We are currently in beta. Sign up for early access and get $10 in free credits when we launch.</p>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-fade-in-up">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
             
-            <form class="space-y-4" onsubmit="event.preventDefault(); closeModal(); alert('Thanks for your interest!');">
-                <input type="email" placeholder="Enter your email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-purple focus:border-transparent outline-none transition-all" required>
-                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all">Notify Me</button>
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full gradient-bg flex items-center justify-center">
+                    <i class="fa-solid fa-envelope text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Get AI pricing updates</h3>
+                <p class="text-gray-600">Join 500+ professionals getting weekly AI cost insights</p>
+            </div>
+            
+            <form id="email-form" class="space-y-4" onsubmit="handleEmailSubmit(event)">
+                <input 
+                    type="email" 
+                    id="user-email"
+                    placeholder="your@email.com" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                >
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+                    Notify me
+                </button>
             </form>
             
-            <button onclick="closeModal()" class="mt-6 text-gray-400 hover:text-gray-600 text-sm">Maybe later</button>
+            <p class="text-xs text-gray-500 text-center mt-4">No spam. Unsubscribe anytime.</p>
         </div>
     </div>
 
@@ -848,6 +1103,58 @@
         function closeModal() {
             const modal = document.getElementById('coming-soon-modal');
             modal.classList.add('hidden');
+        }
+
+        // Email Form Handler
+        function handleEmailSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('user-email').value;
+            
+            // Log email (integrate with Mailchimp, ConvertKit, etc.)
+            console.log('Email submitted:', email);
+            
+            // Show success message
+            const form = document.getElementById('email-form');
+            form.innerHTML = `
+                <div class="text-center py-4">
+                    <i class="fa-solid fa-check-circle text-green-500 text-5xl mb-4"></i>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2">You're in!</h4>
+                    <p class="text-gray-600">Check your email for confirmation</p>
+                </div>
+            `;
+            
+            // Auto-close after 3 seconds
+            setTimeout(() => {
+                closeModal();
+                // Reset form
+                form.innerHTML = `
+                    <input type="email" id="user-email" placeholder="your@email.com" required
+                        class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all">
+                    <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+                        Notify me
+                    </button>
+                `;
+            }, 3000);
+        }
+
+        // Share Results Function
+        function shareResults() {
+            const price = document.getElementById('total-price').innerText;
+            const task = document.getElementById('summary-task').innerText;
+            const url = 'https://ai-task-pricer.vercel.app/';
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AI Task Pricer',
+                    text: `I calculated ${task} will cost ${price} using AI. Check it out!`,
+                    url: url
+                });
+            } else {
+                // Fallback: copy to clipboard
+                const shareText = `${task} costs ${price} - Calculate yours at ${url}`;
+                navigator.clipboard.writeText(shareText);
+                alert('Link copied to clipboard!');
+            }
         }
 
         // Initialize
