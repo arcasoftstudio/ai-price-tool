@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        window.FontAwesomeConfig = {
+          autoReplaceSvg: 'nest'
+        };
+      </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Task Pricer - Intelligent Cost Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            blue: '#2563EB',
+                            purple: '#7C3AED',
+                            dark: '#111827',
+                            light: '#F3F4F6',
+                            gray: '#9CA3AF'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 10px 40px -10px rgba(0, 0, 0, 0.08)',
+                        'glow': '0 0 20px rgba(124, 58, 237, 0.3)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+        }
+        .gradient-bg-hover:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
+        }
+        .custom-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: #E5E7EB;
+            border-radius: 5px;
+            outline: none;
+        }
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #7C3AED;
+            cursor: pointer;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2);
+            transition: all 0.2s;
+        }
+        .custom-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 6px rgba(124, 58, 237, 0.3);
+        }
+        .sidebar-item.active {
+            background-color: #F3F4F6;
+            border-left: 4px solid #7C3AED;
+            color: #111827;
+        }
+        .sidebar-item {
+            border-left: 4px solid transparent;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #7C3AED;
+            width: 20px;
+            height: 20px;
+            -webkit-animation: spin 1s linear infinite; /* Safari */
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-bold">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <span class="font-bold text-xl tracking-tight text-gray-900">AI Task Pricer</span>
+                        <span class="ml-2 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold border border-blue-100">BETA</span>
+                    </div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="#calculator" class="text-gray-500 hover:text-brand-purple px-3 py-2 rounded-md text-sm font-medium transition-colors">Calculator</a>
+                        <a href="#comparison" class="text-gray-500 hover:text-brand-purple px-3 py-2 rounded-md text-sm font-medium transition-colors">Comparison</a>
+                        <a href="#how-it-works" class="text-gray-500 hover:text-brand-purple px-3 py-2 rounded-md text-sm font-medium transition-colors">How it works</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="openModal()" class="hidden md:block text-gray-500 hover:text-gray-900 font-medium text-sm">Sign in</button>
+                    <button onclick="document.getElementById('calculator').scrollIntoView()" class="gradient-bg text-white px-5 py-2 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 bg-white relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-purple-100/50 blur-3xl"></div>
+            <div class="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-50/50 blur-3xl"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-gray-900 mb-6">
+                Discover the <span class="gradient-text">real cost of AI</span><br>for your project
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 mb-10">
+                Transparent pricing. No surprises. No technical jargon. Estimate costs instantly without needing a PhD in Machine Learning.
+            </p>
+            <div class="flex justify-center gap-4 mb-12">
+                <button onclick="document.getElementById('calculator').scrollIntoView()" class="gradient-bg text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg shadow-purple-500/30 hover:shadow-purple-500/40 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2">
+                    Calculate your price <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+                <button onclick="document.getElementById('comparison').scrollIntoView()" class="bg-white text-gray-700 border border-gray-200 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all duration-300">
+                    See savings
+                </button>
+            </div>
+            
+            <div class="inline-flex items-center bg-green-50 border border-green-100 rounded-full px-4 py-1.5 text-green-700 text-sm font-medium animate-bounce">
+                <i class="fa-solid fa-check-circle mr-2"></i> Save up to 40% vs direct providers
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Dashboard Section -->
+    <section id="calculator" class="py-16 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">Intelligent Cost Calculator</h2>
+                <p class="mt-2 text-gray-600">Select a task and customize parameters to get an instant quote.</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-card overflow-hidden border border-gray-100 min-h-[700px]">
+                <div class="grid grid-cols-1 lg:grid-cols-12 h-full">
+                    
+                    <!-- Left Column: Task Categories (20%) -->
+                    <div class="lg:col-span-3 bg-gray-50 border-r border-gray-200 p-4 h-full">
+                        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 pl-3">Select Task</h3>
+                        <div class="space-y-1" id="category-list">
+                            <!-- Categories generated by JS -->
+                            <button class="sidebar-item active w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-gray-700 hover:bg-gray-100" onclick="selectCategory('content')">
+                                <div class="w-8 h-8 rounded-md bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-pen-nib"></i></div>
+                                <span class="font-medium text-sm">Content Writing</span>
+                            </button>
+                            <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-gray-600 hover:bg-gray-100" onclick="selectCategory('document')">
+                                <div class="w-8 h-8 rounded-md bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass"></i></div>
+                                <span class="font-medium text-sm">Document Analysis</span>
+                            </button>
+                            <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-gray-600 hover:bg-gray-100" onclick="selectCategory('chatbot')">
+                                <div class="w-8 h-8 rounded-md bg-green-100 text-green-600 flex items-center justify-center"><i class="fa-solid fa-comments"></i></div>
+                                <span class="font-medium text-sm">Chatbot Assistant</span>
+                            </button>
+                            <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-gray-600 hover:bg-gray-100" onclick="selectCategory('image')">
+                                <div class="w-8 h-8 rounded-md bg-pink-100 text-pink-600 flex items-center justify-center"><i class="fa-solid fa-palette"></i></div>
+                                <span class="font-medium text-sm">Image Generation</span>
+                            </button>
+                            <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-gray-600 hover:bg-gray-100" onclick="selectCategory('audio')">
+                                <div class="w-8 h-8 rounded-md bg-orange-100 text-orange-600 flex items-center justify-center"><i class="fa-solid fa-microphone-lines"></i></div>
+                                <span class="font-medium text-sm">Transcription</span>
+                            </button>
+                            <button class="sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center gap-3 transition-colors text-gray-600 hover:bg-gray-100" onclick="selectCategory('code')">
+                                <div class="w-8 h-8 rounded-md bg-gray-200 text-gray-700 flex items-center justify-center"><i class="fa-solid fa-code"></i></div>
+                                <span class="font-medium text-sm">Code Generation</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Center Column: Parameter Configurator (50%) -->
+                    <div class="lg:col-span-6 p-8 relative">
+                        <div id="configurator-content">
+                            <!-- Dynamic Content Header -->
+                            <div class="flex items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                                <div>
+                                    <h2 class="text-2xl font-bold text-gray-900" id="task-title">Content Writing</h2>
+                                    <p class="text-gray-500 text-sm mt-1" id="task-desc">Generate high-quality articles, blogs, and marketing copy.</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-xl" id="task-icon">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </div>
+                            </div>
+
+                            <!-- Parameters Form -->
+                            <div class="space-y-8">
+                                <!-- Slider 1 -->
+                                <div>
+                                    <div class="flex justify-between mb-2">
+                                        <label for="length-slider" class="font-medium text-gray-700">Length (words)</label>
+                                        <span class="text-brand-purple font-bold bg-purple-50 px-2 py-0.5 rounded text-sm" id="length-value">2000 words</span>
+                                    </div>
+                                    <input type="range" min="500" max="5000" step="100" value="2000" class="custom-slider" id="length-slider" oninput="updatePrice()" aria-valuemin="500" aria-valuemax="5000" aria-valuenow="2000">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-2">
+                                        <span>500</span>
+                                        <span>2500</span>
+                                        <span>5000</span>
+                                    </div>
+                                </div>
+
+                                <!-- Dropdown -->
+                                <div>
+                                    <label for="complexity-select" class="block font-medium text-gray-700 mb-2">Complexity Level</label>
+                                    <div class="relative">
+                                        <select class="block w-full pl-3 pr-10 py-3 text-base border border-gray-300 focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm rounded-lg bg-white shadow-sm transition-shadow" id="complexity-select" onchange="updatePrice()">
+                                            <option value="basic">Basic (General topics)</option>
+                                            <option value="pro" selected>Professional (Researched, specific tone)</option>
+                                            <option value="expert">Expert (Technical, academic)</option>
+                                        </select>
+                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                            <i class="fa-solid fa-chevron-down text-xs mr-2"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Toggle Switch -->
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-brand-purple transition-colors cursor-pointer" 
+                                     onclick="toggleSwitch('research-toggle')" 
+                                     role="button" 
+                                     tabindex="0" 
+                                     onkeydown="if(event.key==='Enter'||event.key===' ') { event.preventDefault(); toggleSwitch('research-toggle'); }"
+                                     aria-labelledby="research-label">
+                                    <div class="flex items-center gap-3">
+                                        <div class="bg-blue-100 p-2 rounded text-blue-600">
+                                            <i class="fa-solid fa-globe"></i>
+                                        </div>
+                                        <div>
+                                            <p id="research-label" class="font-medium text-gray-900">Include Web Research</p>
+                                            <p class="text-xs text-gray-500">Search live web data for up-to-date info</p>
+                                        </div>
+                                    </div>
+                                    <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out bg-gray-200 rounded-full cursor-pointer" id="research-toggle-bg">
+                                        <span class="absolute left-1 top-1 w-4 h-4 transition duration-200 ease-in-out transform bg-white rounded-full shadow" id="research-toggle-dot"></span>
+                                        <input type="checkbox" class="hidden" id="research-toggle" onchange="updatePrice()" aria-labelledby="research-label">
+                                    </div>
+                                </div>
+
+                                <!-- Dropdown 2 -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="language-select" class="block font-medium text-gray-700 mb-2">Output Language</label>
+                                        <select class="block w-full pl-3 pr-10 py-2.5 text-base border border-gray-300 focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm rounded-lg bg-white" id="language-select">
+                                            <option>English (US)</option>
+                                            <option>Spanish</option>
+                                            <option>French</option>
+                                            <option>German</option>
+                                            <option>Italian</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label id="variants-label" class="block font-medium text-gray-700 mb-2">Variants</label>
+                                        <div class="flex items-center gap-4">
+                                            <button onclick="changeVariants(-1)" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 text-gray-600" aria-label="Decrease variants"><i class="fa-solid fa-minus text-xs"></i></button>
+                                            <span class="font-semibold text-gray-900 w-4 text-center" id="variant-count" aria-live="polite">1</span>
+                                            <button onclick="changeVariants(1)" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 text-gray-600" aria-label="Increase variants"><i class="fa-solid fa-plus text-xs"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Price Summary (30%) -->
+                    <div class="lg:col-span-3 bg-gray-50/50 border-l border-gray-200 p-6 flex flex-col h-full relative">
+                        <div class="sticky top-24">
+                            <div class="bg-white rounded-xl shadow-soft p-6 border border-gray-100">
+                                <h3 class="text-lg font-bold text-gray-900 mb-4">Your Quote</h3>
+                                
+                                <div class="space-y-3 mb-6 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Task</span>
+                                        <span class="font-medium text-gray-900 text-right" id="summary-task">Blog Article</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Volume</span>
+                                        <span class="font-medium text-gray-900 text-right" id="summary-volume">2000 words</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">Quality</span>
+                                        <span class="font-medium text-gray-900 text-right" id="summary-quality">Professional</span>
+                                    </div>
+                                    <div class="flex justify-between hidden" id="summary-research-row">
+                                        <span class="text-gray-500">Research</span>
+                                        <span class="font-medium text-brand-blue text-right">Included</span>
+                                    </div>
+                                    <div class="flex justify-between hidden" id="summary-variants-row">
+                                        <span class="text-gray-500">Variants</span>
+                                        <span class="font-medium text-gray-900 text-right" id="summary-variants">1</span>
+                                    </div>
+                                </div>
+
+                                <div class="border-t border-dashed border-gray-300 my-4"></div>
+
+                                <div class="flex justify-between items-end mb-2">
+                                    <span class="text-gray-600 font-medium">TOTAL</span>
+                                    <div class="flex items-center gap-2">
+                                        <div id="loading-spinner" class="loader hidden"></div>
+                                        <span class="text-4xl font-bold text-gray-900" id="total-price">$4.50</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-400 text-right mb-6">Estimated cost based on usage</p>
+
+                                <div class="bg-green-50 rounded-lg p-3 mb-6 border border-green-100 group relative cursor-help">
+                                    <div class="flex items-center gap-2 text-green-700 font-medium text-sm">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                        <span>You save <span id="savings-amount">$2.80</span></span>
+                                    </div>
+                                    <p class="text-xs text-green-600 ml-6">vs UX Pilot Pro subscription</p>
+                                    
+                                    <!-- Tooltip -->
+                                    <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 bg-gray-900 text-white text-xs rounded py-2 px-3 hidden group-hover:block z-20 text-center">
+                                        Based on single-task execution vs monthly subscription fee
+                                        <div class="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                                    </div>
+                                </div>
+
+                                <button onclick="openModal()" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all duration-300 transform hover:-translate-y-0.5">
+                                    Proceed to checkout
+                                </button>
+                            </div>
+
+                            <div class="mt-6 text-center">
+                                <p class="text-xs text-gray-400">Secure payment via Stripe</p>
+                                <div class="flex justify-center gap-2 mt-2 text-gray-300 text-lg">
+                                    <i class="fa-brands fa-cc-visa hover:text-gray-500 transition-colors"></i>
+                                    <i class="fa-brands fa-cc-mastercard hover:text-gray-500 transition-colors"></i>
+                                    <i class="fa-brands fa-cc-amex hover:text-gray-500 transition-colors"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Price Comparison Section -->
+    <section id="comparison" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why pay for a subscription you don't use?</h2>
+                <p class="text-xl text-gray-500 max-w-2xl mx-auto">See how much you can save by paying only for what you need.</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="p-4 text-left text-sm font-semibold text-gray-500 uppercase tracking-wider w-1/4">Scenario</th>
+                            <th class="p-4 text-center w-1/5">
+                                <div class="bg-blue-50 text-brand-blue py-2 px-4 rounded-t-lg font-bold border-t border-x border-blue-100 relative">
+                                    AI Task Pricer
+                                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-brand-purple text-white text-[10px] px-2 py-0.5 rounded-full uppercase font-bold tracking-wide">Best Value</div>
+                                </div>
+                            </th>
+                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">UX Pilot Pro</th>
+                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">UX Pilot Plus</th>
+                            <th class="p-4 text-center text-sm font-semibold text-gray-600 w-1/5">Direct API</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-6 text-gray-900 font-medium">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-newspaper"></i></div>
+                                    <div>
+                                        <p>1000-word Article</p>
+                                        <p class="text-xs text-gray-400 font-normal">SEO optimized blog post</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
+                                <span class="text-xl font-bold text-brand-blue">$2.20</span>
+                            </td>
+                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
+                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
+                            <td class="p-6 text-center text-gray-500">~$1.50 + dev time</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-6 text-gray-900 font-medium">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-file-pdf"></i></div>
+                                    <div>
+                                        <p>50-page PDF Analysis</p>
+                                        <p class="text-xs text-gray-400 font-normal">Extract key insights</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
+                                <span class="text-xl font-bold text-brand-blue">$1.80</span>
+                            </td>
+                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
+                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
+                            <td class="p-6 text-center text-gray-500">~$1.20 + dev time</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-6 text-gray-900 font-medium">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-image"></i></div>
+                                    <div>
+                                        <p>100 AI Images</p>
+                                        <p class="text-xs text-gray-400 font-normal">High fidelity generation</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
+                                <span class="text-xl font-bold text-brand-blue">$12.00</span>
+                            </td>
+                            <td class="p-6 text-center text-gray-500">-</td>
+                            <td class="p-6 text-center text-gray-500">$20.00/mo</td>
+                            <td class="p-6 text-center text-gray-500">~$8.00 + dev time</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-6 text-gray-900 font-medium">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500"><i class="fa-solid fa-robot"></i></div>
+                                    <div>
+                                        <p>Chatbot (1k conv/mo)</p>
+                                        <p class="text-xs text-gray-400 font-normal">Customer support bot</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-6 text-center bg-blue-50/30 border-x border-blue-50">
+                                <span class="text-xl font-bold text-brand-blue">$45.00</span>
+                            </td>
+                            <td class="p-6 text-center text-gray-500">Not available</td>
+                            <td class="p-6 text-center text-gray-500">Not available</td>
+                            <td class="p-6 text-center text-gray-500">~$30.00 + infra</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button onclick="document.getElementById('calculator').scrollIntoView()" class="inline-flex items-center text-brand-purple font-semibold hover:text-purple-800 transition-colors">
+                    Calculate your specific scenario <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-gray-50 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900">How it works</h2>
+                <p class="mt-4 text-gray-500">Three simple steps to AI efficiency.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Step 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow duration-300">
+                    <div class="w-16 h-16 rounded-full bg-blue-100 text-brand-blue flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fa-regular fa-clipboard"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">1. Tell us what you need</h3>
+                    <p class="text-gray-500 leading-relaxed">Select your task category and adjust the parameters to match your specific requirements.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow duration-300 relative">
+                    <!-- Connector Line (Desktop) -->
+                    <div class="hidden md:block absolute top-1/2 left-0 w-8 h-0.5 bg-gray-200 -translate-x-full -translate-y-1/2"></div>
+                    
+                    <div class="w-16 h-16 rounded-full bg-purple-100 text-brand-purple flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">2. We calculate everything</h3>
+                    <p class="text-gray-500 leading-relaxed">Our engine instantly estimates costs using the most efficient models for your task.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-lg transition-shadow duration-300 relative">
+                    <!-- Connector Line (Desktop) -->
+                    <div class="hidden md:block absolute top-1/2 left-0 w-8 h-0.5 bg-gray-200 -translate-x-full -translate-y-1/2"></div>
+                    
+                    <div class="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-2xl mx-auto mb-6">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">3. Pay only for what you use</h3>
+                    <p class="text-gray-500 leading-relaxed">No subscriptions. No wasted credits. Just pay for the task and get your results.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <div class="w-8 h-8 rounded bg-white/10 flex items-center justify-center">
+                        <i class="fa-solid fa-calculator text-white"></i>
+                    </div>
+                    <span class="font-bold text-xl">AI Task Pricer</span>
+                </div>
+                <div class="text-gray-400 text-sm">
+                    &copy; 2024 AI Task Pricer. All rights reserved.
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
+                <p class="mb-2"><i class="fa-solid fa-bolt text-yellow-500 mr-1"></i> Powered by AI • Estimated prices for demo purposes</p>
+                <p>Prices are simulated but realistic based on current API costs of major providers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Coming Soon Modal -->
+    <div id="coming-soon-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center animate-fade-in-up">
+            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 text-brand-purple text-2xl">
+                <i class="fa-solid fa-rocket"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Coming Soon!</h3>
+            <p class="text-gray-500 mb-8">We are currently in beta. Sign up for early access and get $10 in free credits when we launch.</p>
+            
+            <form class="space-y-4" onsubmit="event.preventDefault(); closeModal(); alert('Thanks for your interest!');">
+                <input type="email" placeholder="Enter your email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-purple focus:border-transparent outline-none transition-all" required>
+                <button type="submit" class="w-full gradient-bg text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all">Notify Me</button>
+            </form>
+            
+            <button onclick="closeModal()" class="mt-6 text-gray-400 hover:text-gray-600 text-sm">Maybe later</button>
+        </div>
+    </div>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // Data Models
+        const tasks = {
+            'content': {
+                title: 'Content Writing',
+                desc: 'Generate high-quality articles, blogs, and marketing copy.',
+                icon: 'fa-pen-nib',
+                iconColor: 'bg-blue-100 text-blue-600',
+                basePrice: 0.001, // per word
+                complexityMultipliers: { basic: 1, pro: 1.5, expert: 2.5 },
+                researchCost: 0.50,
+                defaultLength: 2000
+            },
+            'document': {
+                title: 'Document Analysis',
+                desc: 'Extract insights, summaries, and data from PDFs and docs.',
+                icon: 'fa-magnifying-glass',
+                iconColor: 'bg-purple-100 text-purple-600',
+                basePrice: 0.02, // per page
+                complexityMultipliers: { basic: 1, pro: 1.2, expert: 1.5 },
+                researchCost: 0,
+                defaultLength: 50 // pages
+            },
+            'chatbot': {
+                title: 'Chatbot Assistant',
+                desc: 'Customer support and virtual assistant conversations.',
+                icon: 'fa-comments',
+                iconColor: 'bg-green-100 text-green-600',
+                basePrice: 0.03, // per conversation
+                complexityMultipliers: { basic: 1, pro: 1.5, expert: 2 },
+                researchCost: 0.10, // per conv
+                defaultLength: 1000 // convs
+            },
+            'image': {
+                title: 'Image Generation',
+                desc: 'Create high-fidelity AI images for marketing and design.',
+                icon: 'fa-palette',
+                iconColor: 'bg-pink-100 text-pink-600',
+                basePrice: 0.08, // per image
+                complexityMultipliers: { basic: 1, pro: 1.5, expert: 2.0 },
+                researchCost: 0,
+                defaultLength: 100 // images
+            },
+            'audio': {
+                title: 'Transcription',
+                desc: 'Convert audio and video files to accurate text.',
+                icon: 'fa-microphone-lines',
+                iconColor: 'bg-orange-100 text-orange-600',
+                basePrice: 0.10, // per minute
+                complexityMultipliers: { basic: 1, pro: 1.1, expert: 1.3 },
+                researchCost: 0,
+                defaultLength: 60 // minutes
+            },
+            'code': {
+                title: 'Code Generation',
+                desc: 'Generate functions, scripts, and full components.',
+                icon: 'fa-code',
+                iconColor: 'bg-gray-200 text-gray-700',
+                basePrice: 0.05, // per line approx equivalent
+                complexityMultipliers: { basic: 1, pro: 1.8, expert: 3.0 },
+                researchCost: 0.20,
+                defaultLength: 500 // lines
+            }
+        };
+
+        let currentTask = 'content';
+        let currentVariants = 1;
+
+        // UI Interaction Functions
+        function selectCategory(taskId) {
+            // Update active state in sidebar
+            document.querySelectorAll('.sidebar-item').forEach(el => {
+                el.classList.remove('active');
+                el.classList.remove('bg-gray-50');
+                el.classList.add('text-gray-600');
+                el.classList.remove('text-gray-900');
+            });
+            
+            // Find the clicked button (event.currentTarget equivalent logic)
+            // Ideally pass 'this' from onclick, but let's select by onclick attr for simplicity here
+            const btn = document.querySelector(`button[onclick="selectCategory('${taskId}')"]`);
+            if(btn) {
+                btn.classList.add('active');
+                btn.classList.remove('text-gray-600');
+            }
+
+            // Update Task Data
+            currentTask = taskId;
+            const taskData = tasks[taskId];
+            
+            // Update Header
+            document.getElementById('task-title').innerText = taskData.title;
+            document.getElementById('task-desc').innerText = taskData.desc;
+            
+            const iconEl = document.getElementById('task-icon');
+            iconEl.className = `w-12 h-12 rounded-full flex items-center justify-center text-xl ${taskData.iconColor}`;
+            iconEl.innerHTML = `<i class="fa-solid ${taskData.icon}"></i>`;
+
+            // Reset UI Defaults for new task
+            resetConfigurator(taskId);
+            
+            // Trigger Price Update
+            updatePrice();
+        }
+
+        function resetConfigurator(taskId) {
+            const taskData = tasks[taskId];
+            
+            // Reset Slider
+            const slider = document.getElementById('length-slider');
+            const label = document.getElementById('length-value').previousElementSibling;
+            
+            if (taskId === 'content') {
+                slider.min = 500; slider.max = 5000; slider.value = 2000; slider.step = 100;
+                label.innerText = 'Length (words)';
+            } else if (taskId === 'document') {
+                slider.min = 10; slider.max = 500; slider.value = 50; slider.step = 10;
+                label.innerText = 'Length (pages)';
+            } else if (taskId === 'image') {
+                slider.min = 10; slider.max = 500; slider.value = 100; slider.step = 10;
+                label.innerText = 'Quantity (images)';
+            } else if (taskId === 'chatbot') {
+                slider.min = 100; slider.max = 5000; slider.value = 1000; slider.step = 100;
+                label.innerText = 'Volume (conversations)';
+            } else if (taskId === 'audio') {
+                slider.min = 10; slider.max = 1000; slider.value = 60; slider.step = 10;
+                label.innerText = 'Duration (minutes)';
+            } else if (taskId === 'code') {
+                slider.min = 50; slider.max = 2000; slider.value = 500; slider.step = 50;
+                label.innerText = 'Complexity (lines)';
+            }
+
+            // Reset Toggle Visibility (only relevant for some tasks)
+            const toggleContainer = document.getElementById('research-toggle').closest('.flex.items-center.justify-between');
+            if (taskId === 'document' || taskId === 'image' || taskId === 'audio') {
+                toggleContainer.classList.add('opacity-50', 'pointer-events-none');
+                document.getElementById('research-toggle').checked = false;
+                toggleSwitch('research-toggle', true); // Force visual update to off
+            } else {
+                toggleContainer.classList.remove('opacity-50', 'pointer-events-none');
+            }
+            
+            currentVariants = 1;
+            document.getElementById('variant-count').innerText = 1;
+        }
+
+        function toggleSwitch(id, forceOff = false) {
+            const checkbox = document.getElementById(id);
+            if (forceOff) {
+                checkbox.checked = false;
+            } else {
+                checkbox.checked = !checkbox.checked;
+            }
+            
+            const bg = document.getElementById(id + '-bg');
+            const dot = document.getElementById(id + '-dot');
+            
+            if (checkbox.checked) {
+                bg.classList.remove('bg-gray-200');
+                bg.classList.add('bg-brand-purple');
+                dot.classList.add('translate-x-6');
+            } else {
+                bg.classList.add('bg-gray-200');
+                bg.classList.remove('bg-brand-purple');
+                dot.classList.remove('translate-x-6');
+            }
+            updatePrice();
+        }
+
+        function changeVariants(delta) {
+            currentVariants += delta;
+            if (currentVariants < 1) currentVariants = 1;
+            if (currentVariants > 5) currentVariants = 5;
+            document.getElementById('variant-count').innerText = currentVariants;
+            updatePrice();
+        }
+
+        function updatePrice() {
+            // Show Loading
+            const spinner = document.getElementById('loading-spinner');
+            const priceText = document.getElementById('total-price');
+            spinner.classList.remove('hidden');
+            priceText.classList.add('opacity-50');
+
+            // Simulate calculation delay
+            setTimeout(() => {
+                calculateLogic();
+                spinner.classList.add('hidden');
+                priceText.classList.remove('opacity-50');
+            }, 300);
+        }
+
+        function calculateLogic() {
+            const taskData = tasks[currentTask];
+            
+            // Get Values
+            const length = parseInt(document.getElementById('length-slider').value);
+            const complexity = document.getElementById('complexity-select').value;
+            const hasResearch = document.getElementById('research-toggle').checked;
+            
+            // Update UI Labels
+            let unit = 'words';
+            if(currentTask === 'document') unit = 'pages';
+            else if(currentTask === 'image') unit = 'images';
+            else if(currentTask === 'chatbot') unit = 'convs';
+            else if(currentTask === 'audio') unit = 'mins';
+            else if(currentTask === 'code') unit = 'lines';
+
+            document.getElementById('length-value').innerText = `${length} ${unit}`;
+            document.getElementById('summary-task').innerText = taskData.title;
+            document.getElementById('summary-volume').innerText = `${length} ${unit}`;
+            
+            const complexityLabel = document.getElementById('complexity-select').options[document.getElementById('complexity-select').selectedIndex].text.split(' ')[0];
+            document.getElementById('summary-quality').innerText = complexityLabel;
+
+            // Show/Hide Summary Rows
+            const researchRow = document.getElementById('summary-research-row');
+            if (hasResearch) researchRow.classList.remove('hidden');
+            else researchRow.classList.add('hidden');
+
+            const variantsRow = document.getElementById('summary-variants-row');
+            if (currentVariants > 1) {
+                variantsRow.classList.remove('hidden');
+                document.getElementById('summary-variants').innerText = currentVariants;
+            } else {
+                variantsRow.classList.add('hidden');
+            }
+
+            // Calculation
+            let baseTotal = length * taskData.basePrice;
+            baseTotal = baseTotal * taskData.complexityMultipliers[complexity];
+            
+            if (hasResearch) {
+                // Research cost is usually per unit or flat fee depending on logic, simplifying here
+                if(currentTask === 'chatbot') {
+                    baseTotal += (length * taskData.researchCost);
+                } else {
+                    baseTotal += taskData.researchCost * (length / 500); // approx logic
+                }
+            }
+
+            baseTotal = baseTotal * currentVariants;
+
+            // Formatting
+            const finalPrice = baseTotal.toFixed(2);
+            document.getElementById('total-price').innerText = `$${finalPrice}`;
+
+            // Savings Calculation (Simulated logic vs "Market Standard")
+            // Assuming market standard is ~3x our price for enterprise, or flat fee $20 for subscription
+            let marketPrice = 20; // Default subscription
+            if (currentTask === 'chatbot') marketPrice = 100; // Enterprise bot cost
+            if (currentTask === 'image' && length > 50) marketPrice = 30; // Midjourney tier
+
+            let savings = 0;
+            // Logic: If price < subscription, saving is difference. If price > subscription, maybe compare to enterprise per-seat.
+            // For the prototype, let's ensure positive savings for demo purposes by comparing to "Alternative"
+            let comparePrice = baseTotal * 1.6; // Artificially higher
+            if (comparePrice < 20) comparePrice = 20; // Minimum subscription floor
+            
+            savings = (comparePrice - baseTotal).toFixed(2);
+            document.getElementById('savings-amount').innerText = `$${savings}`;
+        }
+
+        // Modal Functions
+        function openModal() {
+            const modal = document.getElementById('coming-soon-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('coming-soon-modal');
+            modal.classList.add('hidden');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial state
+            updatePrice();
+        });
+
+    </script>
+</body>
+</html>
